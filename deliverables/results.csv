@@ -1,0 +1,6 @@
+Model,Variant / settings,Similarity,k,Precision@10,Recall@10,NDCG@10,Catalogue coverage,Seed,Notes
+Item-based kNN,item_knn_cosine_k100,cosine,100,0.22087542087542086,0.0632311464356063,0.24248174240607176,0.06489827453000258,42,Full catalogue; rating>=4 relevance; 1188 users; fit train+validation
+Most popular,popular_all_time_all_ratings,N/A,N/A,0.19183501683501686,0.052514095146072665,0.20704578823929318,0.03785732680916817,42,Full catalogue; rating>=4 relevance; 1188 users; fit train+validation
+Most popular,popular_all_time_positive,N/A,N/A,0.20092592592592595,0.05730672341518448,0.21827682493489844,0.03631212979654906,42,Full catalogue; rating>=4 relevance; 1188 users; fit train+validation
+Most popular,popular_recent_180d_all_ratings,N/A,N/A,0.19326599326599325,0.05411464869909681,0.20837816048495733,0.035539531290239505,42,Full catalogue; rating>=4 relevance; 1188 users; fit train+validation
+Most popular,popular_recent_180d_positive,N/A,N/A,0.2005892255892256,0.05714811483937834,0.21715112119014748,0.036054596961112545,42,Full catalogue; rating>=4 relevance; 1188 users; fit train+validation
