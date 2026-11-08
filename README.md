@@ -30,10 +30,11 @@ The `part_1/` package contains the reusable analysis and recommendation methods:
 - `evaluation.py`: ranking metrics and catalogue coverage.
 - `experiment.py`: validation tuning and test evaluation.
 - `plots.py`: interaction long-tail plots.
+- `reporting.py`: figures, tables, and protocol metadata exports.
 - `__init__.py`: exports the existing public API, so `from part_1 import ...` still works.
 
 `run_all.py` orchestrates the workflow and prints progress;
-`part_1_reporting.py` writes figures, tables, and protocol metadata.
+`part_1/reporting.py` writes figures, tables, and protocol metadata.
 Existing notebook calls to `run_baseline_experiment(ratings, catalogue)` still work;
 callers with a prepared split can pass it in place of `ratings` to avoid splitting again.
 

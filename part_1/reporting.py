@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from openpyxl import load_workbook
 
-from part_1 import plot_interaction_long_tail
+from .plots import plot_interaction_long_tail
 
 
 def save_figures(ratings, summary, out):
@@ -51,7 +51,7 @@ def save_outputs(ratings, summary, split, tuning, results, out):
     (out / "protocol.json").write_text(json.dumps(protocol, indent=2), encoding="utf-8")
     tuning.to_csv(out / "validation_grid.csv", index=False)
     best = tuning.iloc[0]
-    root = Path(__file__).resolve().parent
+    root = Path(__file__).resolve().parent.parent
     workbook = load_workbook(root / "course_results_template.xlsx")
     sheet = workbook["Part 1 - Baselines"]
     rows = []

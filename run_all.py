@@ -14,7 +14,7 @@ def run(data_dir, output_dir="outputs"):
     """Load MovieLens once and pass the same data and split through Part 1."""
     import matplotlib
     matplotlib.use("Agg")
-    from part_1_reporting import save_figures, save_outputs
+    from part_1.reporting import save_figures, save_outputs
 
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=True)
