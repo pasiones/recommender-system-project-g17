@@ -1,4 +1,4 @@
-"""Reproduce Part 1 figures, tables and protocol metadata."""
+"""Reproduce the complete implemented Parts 1 and 2 experiment."""
 import argparse
 from pathlib import Path
 
@@ -8,14 +8,15 @@ from part_1 import (
     run_baseline_experiment,
     temporal_split,
 )
-
+from part_1.reporting import save_figures, save_outputs
+import matplotlib
+from part_2.experiment import run_part_2
+from part_2.reporting import save_part_2
 
 def run(data_dir, output_dir="outputs"):
-    """Load MovieLens once and pass the same data and split through Part 1."""
-    import matplotlib
-    matplotlib.use("Agg")
-    from part_1.reporting import save_figures, save_outputs
+    """Load MovieLens once and pass the same split through both parts."""
 
+    matplotlib.use("Agg")
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=True)
     print(f"Loading MovieLens from {data_dir}...", flush=True)
@@ -33,13 +34,18 @@ def run(data_dir, output_dir="outputs"):
     tuning, results = run_baseline_experiment(split, movies["movie_id"])
     print("Writing results and protocol metadata...", flush=True)
     save_outputs(ratings, summary, split, tuning, results, out)
+
+
+    trials, models, disaggregated, sparsity, selected = run_part_2(split, movies)
+    save_part_2(trials, models, disaggregated, sparsity, selected, out)
+    print(models.to_string(index=False), flush=True)
     print(results.to_string(index=False), flush=True)
     print(f"Saved results, figures and protocol metadata to {out}", flush=True)
     return tuning, results
 
 
 def main(argv=None):
-    """Parse command-line paths and run the complete Part 1 workflow."""
+    """Parse paths and run Parts 1 and 2 by default."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-dir", type=Path, default=Path("ml-1m"))
     parser.add_argument("--output-dir", type=Path, default=Path("outputs"))

@@ -32,20 +32,28 @@ class RunnerTests(unittest.TestCase):
                 patch.object(run_all, "temporal_split", wraps=part_1.temporal_split) as split,
                 patch.object(experiment, "temporal_split", side_effect=AssertionError("Repeated split")),
                 patch.object(pd, "read_csv", wraps=pd.read_csv) as read,
+                patch.object(run_all, "run_part_2", return_value=(None, pd.DataFrame(), None, None, None)) as part_2,
+                patch.object(run_all, "save_part_2") as save_part_2,
                 redirect_stdout(StringIO()),
             ):
                 run_all.main(["--data-dir", str(data), "--output-dir", str(out)])
             load.assert_called_once_with(data)
             split.assert_called_once()
+            part_2.assert_called_once()
+            save_part_2.assert_called_once()
             self.assertEqual(read.call_count, 3)
             self.assertEqual(len(pd.read_csv(out / "validation_grid.csv")), 6)
-            self.assertEqual(len(pd.read_csv(out / "results.csv")), 5)
+            self.assertEqual(len(pd.read_csv(out / "part_1_baselines.csv")), 5)
             for name in (
                 "results.xlsx", "dataset_summary.json", "protocol.json",
                 "monthly_activity.csv", "long_tail.png", "ratings_and_time.png",
             ):
                 self.assertGreater((out / name).stat().st_size, 0)
-            self.assertFalse((out / "report.docx").exists())
+
+    def test_main_runs_part_2_by_default(self):
+        with patch.object(run_all, "run") as run:
+            run_all.main([])
+        run.assert_called_once_with(Path("ml-1m"), Path("outputs"))
 
 
 if __name__ == "__main__":

@@ -66,5 +66,5 @@ def save_outputs(ratings, summary, split, tuning, results, out):
         for column, value in enumerate(row, 1):
             sheet.cell(offset, column, value)
     headers = [sheet.cell(6, c).value for c in range(1, 11)]
-    pd.DataFrame(rows, columns=headers).to_csv(out / "results.csv", index=False)
+    pd.DataFrame(rows, columns=headers).to_csv(out / "part_1_baselines.csv", index=False)
     workbook.save(out / "results.xlsx")
