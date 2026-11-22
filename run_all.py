@@ -1,5 +1,6 @@
 """Reproduce the complete implemented Parts 1 and 2 experiment."""
 import argparse
+from numbers import Integral, Real
 from pathlib import Path
 
 from part_1 import (
@@ -12,6 +13,38 @@ from part_1.reporting import save_figures, save_outputs
 import matplotlib
 from part_2.experiment import run_part_2
 from part_2.reporting import save_part_2
+
+
+def print_results(title, results):
+    """Print each model as an aligned block without overly wide table rows."""
+    def format_value(value):
+        if isinstance(value, Integral):
+            return f"{value:,}"
+        if isinstance(value, Real):
+            return f"{value:.4f}"
+        if isinstance(value, (tuple, list)):
+            return "[" + ", ".join(format_value(item) for item in value) + "]"
+        return str(value)
+
+    labels = {
+        "ndcg_ci": "NDCG confidence interval",
+        "paired_difference_ci": "Paired difference confidence interval",
+    }
+    fields = [column for column in results.columns if column != "model"]
+    labels.update({column: labels.get(column, column.replace("_", " ").capitalize())
+                   for column in fields})
+    width = max((len(labels[column]) for column in fields), default=0)
+    lines = ["", "=" * 72, title, "=" * 72]
+    if results.empty:
+        lines.append("No results available.")
+    for number, row in enumerate(results.to_dict(orient="records"), start=1):
+        lines.append(f"\n{number}. {row.get('model', 'Result')}")
+        lines.extend(
+            f"   {labels[column]:<{width}} : {format_value(row[column])}"
+            for column in fields
+        )
+    print("\n".join(lines), flush=True)
+
 
 def run(data_dir, output_dir="outputs"):
     """Load MovieLens once and pass the same split through both parts."""
@@ -38,9 +71,9 @@ def run(data_dir, output_dir="outputs"):
 
     trials, models, disaggregated, sparsity, selected = run_part_2(split, movies)
     save_part_2(trials, models, disaggregated, sparsity, selected, out)
-    print(models.to_string(index=False), flush=True)
-    print(results.to_string(index=False), flush=True)
-    print(f"Saved results, figures and protocol metadata to {out}", flush=True)
+    print_results("Part 1 - Baseline results", results)
+    print_results("Part 2 - Model comparison results", models)
+    print(f"\nSaved results, figures and protocol metadata to {out}", flush=True)
     return tuning, results
 
 
