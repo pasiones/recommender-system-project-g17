@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Python 3.15.2
+- Python 3.12.3 (tested)
 - [MovieLens 1M](https://grouplens.org/datasets/movielens/1m/), downloaded and extracted according to its usage terms
 
 Place the extracted data in `ml-1m/` at the project root. It must contain `users.dat`, `movies.dat`, and `ratings.dat`.
@@ -29,7 +29,7 @@ From the project root, run [run_all.py](./run_all.py):
 python run_all.py
 ```
 
-This reproduces the implemented Parts 1 and 2 results, figures, workbook in `outputs/`. The default data directory is `ml-1m/`. To use other locations:
+This reproduces the implemented Parts 1, 2 and 3 Track A results, figures, workbook in `outputs/`. The default data directory is `ml-1m/`. To use other locations:
 
 ```sh
 python run_all.py --data-dir /path/to/ml-1m --output-dir /path/to/outputs
