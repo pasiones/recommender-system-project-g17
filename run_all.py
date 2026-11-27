@@ -1,4 +1,4 @@
-"""Reproduce the complete implemented Parts 1 and 2 experiment."""
+"""Reproduce the complete implemented Parts 1, 2 and 3 Track A experiment."""
 import argparse
 from numbers import Integral, Real
 from pathlib import Path
@@ -13,6 +13,8 @@ from part_1.reporting import save_figures, save_outputs
 import matplotlib
 from part_2.experiment import run_part_2
 from part_2.reporting import save_part_2
+from part_3.experiment import run_part_3
+from part_3.reporting import save_part_3
 
 
 def print_results(title, results):
@@ -47,7 +49,7 @@ def print_results(title, results):
 
 
 def run(data_dir, output_dir="outputs"):
-    """Load MovieLens once and pass the same split through both parts."""
+    """Load MovieLens once and pass the same split through all three parts."""
 
     matplotlib.use("Agg")
     out = Path(output_dir)
@@ -69,16 +71,21 @@ def run(data_dir, output_dir="outputs"):
     save_outputs(ratings, summary, split, tuning, results, out)
 
 
-    trials, models, disaggregated, sparsity, selected = run_part_2(split, movies)
+    trials, models, disaggregated, sparsity, selected = run_part_2(
+        split, movies, progress=lambda message: print(message, flush=True))
     save_part_2(trials, models, disaggregated, sparsity, selected, out)
+    diversity, activity, protocol = run_part_3(
+        split, movies, trials, selected, progress=lambda message: print(message, flush=True))
+    save_part_3(diversity, activity, protocol, out)
     print_results("Part 1 - Baseline results", results)
     print_results("Part 2 - Model comparison results", models)
+    print_results("Part 3A - Diversity and popularity bias", diversity)
     print(f"\nSaved results, figures and protocol metadata to {out}", flush=True)
     return tuning, results
 
 
 def main(argv=None):
-    """Parse paths and run Parts 1 and 2 by default."""
+    """Parse paths and run Parts 1, 2 and 3 Track A by default."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-dir", type=Path, default=Path("ml-1m"))
     parser.add_argument("--output-dir", type=Path, default=Path("outputs"))

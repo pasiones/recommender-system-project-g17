@@ -34,6 +34,8 @@ class RunnerTests(unittest.TestCase):
                 patch.object(pd, "read_csv", wraps=pd.read_csv) as read,
                 patch.object(run_all, "run_part_2", return_value=(None, pd.DataFrame(), None, None, None)) as part_2,
                 patch.object(run_all, "save_part_2") as save_part_2,
+                patch.object(run_all, "run_part_3", return_value=(pd.DataFrame(), None, None)) as part_3,
+                patch.object(run_all, "save_part_3") as save_part_3,
                 redirect_stdout(StringIO()),
             ):
                 run_all.main(["--data-dir", str(data), "--output-dir", str(out)])
@@ -41,6 +43,8 @@ class RunnerTests(unittest.TestCase):
             split.assert_called_once()
             part_2.assert_called_once()
             save_part_2.assert_called_once()
+            part_3.assert_called_once()
+            save_part_3.assert_called_once()
             self.assertEqual(read.call_count, 3)
             self.assertEqual(len(pd.read_csv(out / "validation_grid.csv")), 6)
             self.assertEqual(len(pd.read_csv(out / "part_1_baselines.csv")), 5)

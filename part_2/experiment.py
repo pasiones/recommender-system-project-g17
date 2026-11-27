@@ -22,18 +22,18 @@ def settings_grid():
     }
 
 
-def recommend(name, settings, train, movies, users):
+def recommend(name, settings, train, movies, users, n=10):
     catalogue = movies.movie_id
     if name == "Item-based kNN":
-        return item_knn_recommendations(train, users, catalogue, **settings)
+        return item_knn_recommendations(train, users, catalogue, n=n, **settings)
     if name == "Most popular":
-        return popular_recommendations(train, users, catalogue, **settings)
+        return popular_recommendations(train, users, catalogue, n=n, **settings)
     if name == "User-based kNN":
-        return user_knn_recommendations(train, users, catalogue, **settings)
+        return user_knn_recommendations(train, users, catalogue, n=n, **settings)
     if name == "Biased MF":
-        return mf_recommendations(train, users, catalogue, seed=SEED, **settings)
+        return mf_recommendations(train, users, catalogue, n=n, seed=SEED, **settings)
     if name == "Content profile":
-        return content_recommendations(train, movies, users, **settings)
+        return content_recommendations(train, movies, users, n=n, **settings)
     raise ValueError(name)
 
 
