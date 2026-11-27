@@ -1,0 +1,29 @@
+{
+  "base_model": "Item-based kNN",
+  "base_settings": {
+    "similarity": "cosine",
+    "k_neighbors": 100
+  },
+  "seed": 42,
+  "selection": "Part 2 validation NDCG, Recall, Precision; stable family order for ties",
+  "lambdas": [
+    0.0,
+    0.1,
+    0.25,
+    0.5,
+    0.75,
+    0.9,
+    1.0
+  ],
+  "candidates": "All unseen catalogue items; all fit ratings excluded",
+  "relevance": "1/log2(base rank+1), one-based rank; rank-based MMR",
+  "objective": "lambda*relevance - (1-lambda)*max cosine similarity to selected items",
+  "distance": "Cosine distance on L2-normalized multi-hot genre vectors",
+  "calibration": "Total variation of fractional genre distributions; positive fit history (rating>=4); no smoothing",
+  "calibration_missing": "Exclude users without positive fit history or recommendations; report count",
+  "population": "Users with positive test feedback, identical for all accuracy/diversity metrics",
+  "gini": "Unweighted recommendation counts over full catalogue including zero exposures; uncorrected Gini",
+  "activity_cutoff": 145.5,
+  "operating_point": "No test-selected optimum; report the entire predeclared sweep",
+  "uncertainty": "1000 paired user bootstrap samples, seed 42, 95% percentile intervals vs lambda=1"
+}
